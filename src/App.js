@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import GlobalStyles from './GlobalStyles';
 import styled from 'styled-components';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import NavBar from './NavBar';
 import NavItem from './NavItem';
@@ -10,8 +11,9 @@ import IconButton from './IconButton';
 import { ReactComponent as SunIcon } from './icons/sun.svg';
 import { ReactComponent as MoonIcon } from './icons/moon.svg';
 import todoReducer from './todoReducer';
-import { CREATE, COMPLETE } from './constants';
+import { CREATE, COMPLETE, MOVE } from './constants';
 import useTheme from './useTheme';
+import TaskList from './TaskList';
 
 const Title = styled.h2`
   color: var(--color-primary);
@@ -41,25 +43,43 @@ export default function App() {
       ? state.filter((task) => !task.complete)
       : state;
     return tasksToRender.map((task, index) => (
-      <TaskItem key={index} task={task} onComplete={handleComplete} />
+      <TaskItem
+        key={`${task.id}`}
+        index={index}
+        task={task}
+        onComplete={handleComplete}
+      />
     ));
   };
 
   const themeIcon = theme === 'dark' ? <MoonIcon /> : <SunIcon />;
 
+  const handleDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+    dispatch({
+      type: MOVE,
+      fromIndex: result.source.index,
+      toIndex: result.destination.index,
+    });
+  };
+
   return (
     <div>
-      <GlobalStyles />
-      <NavBar>
-        <NavItem>
-          <IconButton onClick={toggleTheme}>{themeIcon}</IconButton>
-        </NavItem>
-      </NavBar>
-      <div className="wrapper">
-        <Title>Tasks</Title>
-        <TextInput onSubmit={handleSubmit} placeholder="Add a new task" />
-        {renderTaskItems()}
-      </div>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <GlobalStyles />
+        <NavBar>
+          <NavItem>
+            <IconButton onClick={toggleTheme}>{themeIcon}</IconButton>
+          </NavItem>
+        </NavBar>
+        <div className="wrapper">
+          <Title>Tasks</Title>
+          <TextInput onSubmit={handleSubmit} placeholder="Add a new task" />
+          <TaskList>{renderTaskItems()}</TaskList>
+        </div>
+      </DragDropContext>
     </div>
   );
 }
