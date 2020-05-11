@@ -23,6 +23,10 @@ const StyledTaskItem = styled.div`
   :hover {
     background-color: var(--color-secondary);
   }
+
+  &[data-rbd-drag-handle-context-id] {
+    cursor: pointer;
+  }
 `;
 
 export default function TaskItem({ index, task, onComplete }) {
