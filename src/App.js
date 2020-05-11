@@ -3,17 +3,17 @@ import GlobalStyles from './GlobalStyles';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import NavBar from './NavBar';
-import NavItem from './NavItem';
-import TextInput from './TextInput';
-import TaskItem from './TaskItem';
-import IconButton from './IconButton';
+import NavBar from './components/NavBar';
+import NavItem from './components/NavItem';
+import TextInput from './components/TextInput';
+import TaskItem from './components/TaskItem';
+import IconButton from './components/IconButton';
 import { ReactComponent as SunIcon } from './icons/sun.svg';
 import { ReactComponent as MoonIcon } from './icons/moon.svg';
 import todoReducer from './todoReducer';
 import { CREATE, COMPLETE, MOVE } from './constants';
 import useTheme from './useTheme';
-import TaskList from './TaskList';
+import TaskList from './components/TaskList';
 
 const Title = styled.h2`
   color: var(--color-primary);

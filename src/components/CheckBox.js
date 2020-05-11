@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ReactComponent as CircleIcon } from './icons/circle.svg';
-import { ReactComponent as CheckIcon } from './icons/check.svg';
+import { ReactComponent as CircleIcon } from '../icons/circle.svg';
+import { ReactComponent as CheckIcon } from '../icons/check.svg';
 import IconButton from './IconButton';
 
 const StyledCheckBox = styled(IconButton)`
