@@ -15,8 +15,24 @@ import { CREATE, COMPLETE, MOVE } from './constants';
 import useTheme from './useTheme';
 import TaskList from './components/TaskList';
 
-const Title = styled.h2`
-  color: var(--color-primary);
+const Wrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const Tasks = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 40px;
+  overflow: hidden;
+  h2 {
+    color: var(--color-primary);
+  }
 `;
 
 const initialState = [
@@ -66,20 +82,22 @@ export default function App() {
   };
 
   return (
-    <div>
+    <React.Fragment>
+      <GlobalStyles />
       <DragDropContext onDragEnd={handleDragEnd}>
-        <GlobalStyles />
-        <NavBar>
-          <NavItem>
-            <IconButton onClick={toggleTheme}>{themeIcon}</IconButton>
-          </NavItem>
-        </NavBar>
-        <div className="wrapper">
-          <Title>Tasks</Title>
-          <TextInput onSubmit={handleSubmit} placeholder="Add a new task" />
-          <TaskList>{renderTaskItems()}</TaskList>
-        </div>
+        <Wrapper>
+          <NavBar>
+            <NavItem>
+              <IconButton onClick={toggleTheme}>{themeIcon}</IconButton>
+            </NavItem>
+          </NavBar>
+          <Tasks>
+            <h2>Tasks</h2>
+            <TextInput onSubmit={handleSubmit} placeholder="Add a new task" />
+            <TaskList>{renderTaskItems()}</TaskList>
+          </Tasks>
+        </Wrapper>
       </DragDropContext>
-    </div>
+    </React.Fragment>
   );
 }
