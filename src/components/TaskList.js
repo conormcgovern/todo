@@ -5,6 +5,17 @@ import styled from 'styled-components';
 
 const TaskListWrapper = styled.div`
   overflow: auto;
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-secondary);
+  }
 `;
 
 function TaskList({ children }) {
