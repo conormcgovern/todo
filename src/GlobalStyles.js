@@ -12,8 +12,8 @@ const GlobalStyles = createGlobalStyle`
     --navbar-height: 56px;
     --icon-size: 20px;
     --icon-button-size: var(--min-tap-target-height);
-    --sidebar-width-open: 16rem;
-    --sidebar-width-closed: 0;
+    --sidebar-width: 16rem;
+    --sidebar-left-margin: -16rem;
 
     @media (min-width: 600px) {
       --min-tap-target-height: 32px;

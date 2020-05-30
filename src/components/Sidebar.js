@@ -8,12 +8,12 @@ import NavItem from './NavItem';
 const StyledSidebar = styled.nav`
   display: flex;
   flex-direction: column;
-  width: ${(props) =>
-    props.open ? 'var(--sidebar-width-open)' : 'var(--sidebar-width-closed)'};
+  width: var(--sidebar-width);
   height: 100%;
   background-color: var(--color-secondary);
-  transition: width 250ms ease-in-out;
+  transition: margin 250ms ease-in-out;
   overflow: hidden;
+  margin-left: ${(props) => (props.open ? 0 : 'var(--sidebar-left-margin)')};
 `;
 
 const SidebarItem = styled(NavItem)`
