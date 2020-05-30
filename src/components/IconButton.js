@@ -6,7 +6,6 @@ const StyledIconButton = styled.a`
   width: var(--icon-button-size);
   height: var(--icon-button-size);
   border-radius: 50%;
-  margin: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,6 +15,12 @@ const StyledIconButton = styled.a`
     color: var(--icon-color-secondary);
     opacity: 87%;
     width: var(--icon-size);
+    transition: opacity 100ms ease-in-out;
+  }
+  :hover {
+    > svg {
+      opacity: 100%;
+    }
   }
 `;
 

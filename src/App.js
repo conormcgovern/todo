@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import GlobalStyles from './GlobalStyles';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -14,6 +14,8 @@ import todoReducer from './todoReducer';
 import { CREATE, COMPLETE, MOVE } from './constants';
 import useTheme from './useTheme';
 import TaskList from './components/TaskList';
+import Sidebar from './components/Sidebar';
+import { ReactComponent as MenuIcon } from './icons/bars.svg';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -28,11 +30,17 @@ const Tasks = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 0 40px;
+  padding: 16px 40px;
   overflow: hidden;
   h2 {
     color: var(--color-primary);
   }
+`;
+
+const Main = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 100%;
 `;
 
 const initialState = [
@@ -45,6 +53,7 @@ export default function App() {
   const [state, dispatch] = useReducer(todoReducer, initialState);
   const [theme, toggleTheme] = useTheme();
   const hideCompleted = false;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSubmit = (value) => {
     dispatch({ type: CREATE, title: value });
@@ -81,6 +90,10 @@ export default function App() {
     });
   };
 
+  const handleMenuClick = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
     <React.Fragment>
       <GlobalStyles />
@@ -88,14 +101,22 @@ export default function App() {
         <Wrapper>
           <NavBar>
             <NavItem>
+              <IconButton onClick={handleMenuClick}>
+                <MenuIcon />
+              </IconButton>
+            </NavItem>
+            <NavItem className="push-right">
               <IconButton onClick={toggleTheme}>{themeIcon}</IconButton>
             </NavItem>
           </NavBar>
-          <Tasks>
-            <h2>Tasks</h2>
-            <TextInput onSubmit={handleSubmit} placeholder="Add a new task" />
-            <TaskList>{renderTaskItems()}</TaskList>
-          </Tasks>
+          <Main>
+            <Sidebar open={sidebarOpen}></Sidebar>
+            <Tasks>
+              <h2>Tasks</h2>
+              <TextInput onSubmit={handleSubmit} placeholder="Add a new task" />
+              <TaskList>{renderTaskItems()}</TaskList>
+            </Tasks>
+          </Main>
         </Wrapper>
       </DragDropContext>
     </React.Fragment>

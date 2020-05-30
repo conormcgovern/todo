@@ -7,13 +7,14 @@ const Nav = styled.nav`
   background-color: var(--navbar-color);
   padding: 0;
   --icon-color-primary: var(--gray-3);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.16), 0 1px 6px rgba(0, 0, 0, 0.23);
+  z-index: 1;
 `;
 
 const List = styled.ul`
   max-width: 100%;
   height: 100%;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   padding: 0px 24px;
 `;

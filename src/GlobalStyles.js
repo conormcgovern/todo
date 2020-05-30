@@ -12,6 +12,8 @@ const GlobalStyles = createGlobalStyle`
     --navbar-height: 56px;
     --icon-size: 20px;
     --icon-button-size: var(--min-tap-target-height);
+    --sidebar-width-open: 16rem;
+    --sidebar-width-closed: 0;
 
     @media (min-width: 600px) {
       --min-tap-target-height: 32px;
@@ -20,7 +22,7 @@ const GlobalStyles = createGlobalStyle`
     /* Colors */
     --gray-0: #121212;
     --gray-1: #1b1b1b;
-    --gray-2: #424242;
+    --gray-2: #202020;
     --gray-3: #e0e0e0;
     --gray-4: #eeeeee;
     --gray-5: #7a7a7a;
@@ -84,7 +86,11 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .wrapper {
-    padding: 0 24px;
+    margin-left: 24rem;
+  }
+
+  .push-right {
+    margin-left: auto;
   }
 
 `;
