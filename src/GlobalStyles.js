@@ -38,6 +38,7 @@ const GlobalStyles = createGlobalStyle`
     --bg: #ffffff;
     --color-primary: var(--purple-1);
     --color-secondary: var(--gray-4);
+    --color-tertiary: var(--gray-3);
     --color-text: black;
     --icon-color-primary:  var(--color-primary);
     --icon-color-secondary: white;
@@ -49,6 +50,7 @@ const GlobalStyles = createGlobalStyle`
     --bg: #ffffff;
     --color-primary: var(--purple-1);
     --color-secondary: var(--gray-4);
+    --color-tertiary: var(--gray-3);
     --color-text: black;
     --icon-color-primary:  var(--color-primary);
     --icon-color-secondary: white;
@@ -60,6 +62,7 @@ const GlobalStyles = createGlobalStyle`
     --bg: var(--gray-0);
     --color-primary: var(--purple-0);
     --color-secondary: var(--gray-1);
+    --color-tertiary: var(--gray-2);
     --color-text: var(--gray-3);
     --icon-color-primary:  var(--color-primary);
     --icon-color-secondary: var(--gray-1);

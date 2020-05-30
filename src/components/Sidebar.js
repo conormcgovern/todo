@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as MenuIcon } from '../icons/bars.svg';
 import { ReactComponent as ListIcon } from '../icons/list.svg';
 import { ReactComponent as AddIcon } from '../icons/plus.svg';
 import IconButton from './IconButton';
@@ -13,34 +12,51 @@ const StyledSidebar = styled.nav`
     props.open ? 'var(--sidebar-width-open)' : 'var(--sidebar-width-closed)'};
   height: 100%;
   background-color: var(--color-secondary);
-  opacity: 87%;
   transition: width 250ms ease-in-out;
   overflow: hidden;
+`;
 
-  li {
-    margin: 0 1rem;
+const SidebarItem = styled(NavItem)`
+  padding: 0 1rem;
+  cursor: pointer;
+  background-color: ${(props) =>
+    props.selected ? 'var(--color-tertiary)' : 'none'};
+  p {
+    color: ${(props) =>
+      props.selected ? 'var(--color-primary)' : 'var(--color-text)'};
+    font-weight: ${(props) => (props.selected ? '500' : 'normal')};
+  }
+  :hover {
+    opacity: 87%;
+    background-color: var(--bg);
   }
 `;
 
-function Sidebar({ open, toggleOpen }) {
+function Sidebar({ open }) {
   return (
     <StyledSidebar open={open}>
       <ul>
-        <NavItem>
+        <SidebarItem>
           <h3>Lists</h3>
-        </NavItem>
-        <NavItem>
+        </SidebarItem>
+        <SidebarItem selected>
           <IconButton>
             <ListIcon></ListIcon>
           </IconButton>
           <p>Tasks</p>
-        </NavItem>
-        <NavItem>
+        </SidebarItem>
+        <SidebarItem>
+          <IconButton>
+            <ListIcon></ListIcon>
+          </IconButton>
+          <p>Groceries</p>
+        </SidebarItem>
+        <SidebarItem>
           <IconButton>
             <AddIcon></AddIcon>
           </IconButton>
           <p>New list</p>
-        </NavItem>
+        </SidebarItem>
       </ul>
     </StyledSidebar>
   );
