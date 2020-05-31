@@ -11,7 +11,7 @@ const StyledSidebar = styled.nav`
   width: var(--sidebar-width);
   height: 100%;
   background-color: var(--color-secondary);
-  transition: margin 250ms ease-in-out;
+  transition: margin 200ms ease-in-out;
   overflow: hidden;
   margin-left: ${(props) => (props.open ? 0 : 'var(--sidebar-left-margin)')};
 `;
