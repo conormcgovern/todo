@@ -11,8 +11,6 @@ const Input = styled.input`
   color: var(--color-text);
   background-color: inherit;
   height: 100%;
-  margin-top: 1em;
-  margin-bottom: 1em;
   ::placeholder {
     color: var(--color-primary);
   }
@@ -21,7 +19,22 @@ const Input = styled.input`
   }
 `;
 
-export default function TextInput({ onSubmit, placeholder }) {
+const InputWrapper = styled.div`
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: var(--icon-button-size) 1fr;
+  grid-column-gap: 24px;
+  align-items: center;
+  border-bottom: 1px solid;
+  border-color: var(--color-secondary);
+  transition: border-color 100ms ease-in-out;
+
+  :focus-within {
+    border-color: var(--color-primary);
+  }
+`;
+
+export default function TaskTextInput({ onSubmit, placeholder }) {
   const [value, setValue] = useState('');
 
   const handleChange = (event) => {
@@ -36,19 +49,26 @@ export default function TextInput({ onSubmit, placeholder }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Input
-        type="text"
-        id="input"
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-        autoComplete="off"
-      />
+      <InputWrapper>
+        <label htmlFor="input">
+          <IconButton>
+            <PlusIcon />
+          </IconButton>
+        </label>
+        <Input
+          type="text"
+          id="input"
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          autoComplete="off"
+        />
+      </InputWrapper>
     </form>
   );
 }
 
-TextInput.propTypes = {
+TaskTextInput.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
 };

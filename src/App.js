@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 import NavBar from './components/NavBar';
 import NavItem from './components/NavItem';
-import TextInput from './components/TextInput';
+import TaskTextInput from './components/TaskTextInput';
 import TaskItem from './components/TaskItem';
 import IconButton from './components/IconButton';
 import { ReactComponent as SunIcon } from './icons/sun.svg';
@@ -113,7 +113,10 @@ export default function App() {
             <Sidebar open={sidebarOpen}></Sidebar>
             <Tasks>
               <h2>Tasks</h2>
-              <TextInput onSubmit={handleSubmit} placeholder="Add a new task" />
+              <TaskTextInput
+                onSubmit={handleSubmit}
+                placeholder="Add a new task"
+              />
               <TaskList>{renderTaskItems()}</TaskList>
             </Tasks>
           </Main>
