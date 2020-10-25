@@ -1,4 +1,4 @@
-function loadTheme() {
+export default function loadTheme() {
   const storedTheme = window.localStorage.getItem('theme');
   if (storedTheme === 'light') {
     document.body.classList.add('light');
@@ -8,4 +8,3 @@ function loadTheme() {
     document.body.classList.add('light');
   }
 }
-loadTheme();
