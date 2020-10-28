@@ -1,4 +1,4 @@
-import { CREATE, COMPLETE, MOVE } from './constants';
+import { CREATE, COMPLETE, MOVE, INIT } from './constants';
 
 const todoReducer = (state, action) => {
   switch (action.type) {
@@ -11,22 +11,16 @@ const todoReducer = (state, action) => {
     case MOVE:
       return move(state, action);
 
+    case INIT:
+      return action.tasks;
+
     default:
       return state;
   }
 };
 
 function create(state, action) {
-  return action.title.length
-    ? [
-        ...state,
-        {
-          id: state.length ? Math.max(...state.map((todo) => todo.id)) + 1 : 0,
-          title: action.title,
-          complete: false,
-        },
-      ]
-    : state;
+  return [...state, action.task];
 }
 
 function complete(state, action) {

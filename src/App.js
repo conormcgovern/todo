@@ -3,41 +3,27 @@ import netlifyIdentity from 'netlify-identity-widget';
 
 import Home from './Home';
 
-const netlifyAuth = {
-  isAuthenticated: false,
-  user: null,
-  authenticate(callback) {
-    this.isAuthenticated = true;
-    netlifyIdentity.open();
-    netlifyIdentity.on('login', (user) => {
-      this.user = user;
-      callback(user);
-    });
-  },
-  signout(callback) {
-    this.isAuthenticated = false;
-    netlifyIdentity.logout();
-    netlifyIdentity.on('logout', () => {
-      this.user = null;
-      callback();
-    });
-  },
-};
-
 export default function App() {
-  console.log('in App component');
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(netlifyIdentity.currentUser);
 
   const login = () => {
-    netlifyAuth.authenticate((user) => {
+    netlifyIdentity.open();
+    netlifyIdentity.on('login', (user) => {
       setUser(user);
+    });
+  };
+
+  const signout = () => {
+    netlifyIdentity.logout();
+    netlifyIdentity.on('logout', () => {
+      setUser(null);
     });
   };
 
   return (
     <div>
       {!user && <button onClick={login}>Log in</button>}
-      {user && <Home user={user} />}
+      {user && <Home user={user} onSignout={signout} />}
     </div>
   );
 }

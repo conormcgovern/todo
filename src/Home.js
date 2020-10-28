@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import GlobalStyles from './GlobalStyles';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -16,6 +16,7 @@ import useTheme from './useTheme';
 import TaskList from './components/TaskList';
 import Sidebar from './components/Sidebar';
 import { ReactComponent as MenuIcon } from './icons/bars.svg';
+import api from './api';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -43,21 +44,15 @@ const Main = styled.div`
   height: 100%;
 `;
 
-const initialState = [
-  { id: 1, title: 'First task', complete: false },
-  { id: 2, title: 'Second task', complete: false },
-  { id: 3, title: 'Third task', complete: false },
-];
-
-export default function Home({ user }) {
-  console.log(user);
-  const [state, dispatch] = useReducer(todoReducer, initialState);
+export default function Home({ onSignout }) {
+  const [state, dispatch] = useReducer(todoReducer, []);
   const [theme, toggleTheme] = useTheme();
   const hideCompleted = false;
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleSubmit = (value) => {
-    dispatch({ type: CREATE, title: value });
+  const handleSubmit = async (value) => {
+    const response = await api.create(value);
+    dispatch({ type: CREATE, task: response });
   };
 
   const handleComplete = (id) => {
@@ -95,6 +90,12 @@ export default function Home({ user }) {
     setSidebarOpen(!sidebarOpen);
   };
 
+  useEffect(() => {
+    api.readAll().then((tasks) => {
+      dispatch({ type: 'init', tasks: tasks });
+    });
+  }, []);
+
   return (
     <React.Fragment>
       <GlobalStyles />
@@ -108,6 +109,9 @@ export default function Home({ user }) {
             </NavItem>
             <NavItem className="push-right">
               <IconButton onClick={toggleTheme}>{themeIcon}</IconButton>
+            </NavItem>
+            <NavItem>
+              <button onClick={onSignout}>Sign out</button>
             </NavItem>
           </NavBar>
           <Main>

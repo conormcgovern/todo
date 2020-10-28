@@ -43,8 +43,10 @@ export default function TaskTextInput({ onSubmit, placeholder }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(value);
-    setValue('');
+    if (value.trim().length) {
+      onSubmit(value);
+      setValue('');
+    }
   };
 
   return (

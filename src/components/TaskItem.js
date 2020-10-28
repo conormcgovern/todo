@@ -30,7 +30,7 @@ const StyledTaskItem = styled.div`
 `;
 
 export default function TaskItem({ index, task, onComplete }) {
-  const { id, title, complete } = task;
+  const { id, text, complete } = task;
   const handleComplete = () => onComplete(id);
   return (
     <Draggable draggableId={`${id}`} index={index}>
@@ -43,7 +43,7 @@ export default function TaskItem({ index, task, onComplete }) {
           {...provided.dragHandleProps}
         >
           <CheckBox checked={complete} onClick={handleComplete} />
-          <p>{title}</p>
+          <p>{text}</p>
         </StyledTaskItem>
       )}
     </Draggable>
@@ -53,7 +53,7 @@ export default function TaskItem({ index, task, onComplete }) {
 TaskItem.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
     complete: PropTypes.bool.isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,
