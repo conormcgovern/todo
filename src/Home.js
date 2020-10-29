@@ -3,20 +3,14 @@ import GlobalStyles from './GlobalStyles';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import NavBar from './components/NavBar';
-import NavItem from './components/NavItem';
-import TaskTextInput from './components/TaskTextInput';
-import TaskItem from './components/TaskItem';
-import IconButton from './components/IconButton';
-import { ReactComponent as SunIcon } from './icons/sun.svg';
-import { ReactComponent as MoonIcon } from './icons/moon.svg';
-import todoReducer from './todoReducer';
 import { CREATE, COMPLETE, MOVE, REMOVE, INIT } from './constants';
-import useTheme from './useTheme';
-import TaskList from './components/TaskList';
-import Sidebar from './components/Sidebar';
-import { ReactComponent as MenuIcon } from './icons/bars.svg';
 import api from './api';
+import todoReducer from './todoReducer';
+import TodoAppBar from './components/TodoAppBar';
+import Sidebar from './components/Sidebar';
+import TaskTextInput from './components/TaskTextInput';
+import TaskList from './components/TaskList';
+import TaskItem from './components/TaskItem';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -46,7 +40,6 @@ const Main = styled.div`
 
 export default function Home({ onSignout }) {
   const [state, dispatch] = useReducer(todoReducer, []);
-  const [theme, toggleTheme] = useTheme();
   const hideCompleted = false;
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -94,8 +87,6 @@ export default function Home({ onSignout }) {
     ));
   };
 
-  const themeIcon = theme === 'dark' ? <MoonIcon /> : <SunIcon />;
-
   useEffect(() => {
     api.readAll().then((tasks) => {
       dispatch({ type: INIT, tasks: tasks });
@@ -107,19 +98,7 @@ export default function Home({ onSignout }) {
       <GlobalStyles />
       <DragDropContext onDragEnd={handleDragEnd}>
         <Wrapper>
-          <NavBar>
-            <NavItem>
-              <IconButton onClick={handleMenuClick}>
-                <MenuIcon />
-              </IconButton>
-            </NavItem>
-            <NavItem className="push-right">
-              <IconButton onClick={toggleTheme}>{themeIcon}</IconButton>
-            </NavItem>
-            <NavItem>
-              <button onClick={onSignout}>Sign out</button>
-            </NavItem>
-          </NavBar>
+          <TodoAppBar onMenuClick={handleMenuClick} onSignout={onSignout} />
           <Main>
             <Sidebar open={sidebarOpen}></Sidebar>
             <Tasks>
