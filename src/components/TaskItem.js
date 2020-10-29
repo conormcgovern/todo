@@ -33,7 +33,7 @@ const StyledTaskItem = styled.div`
 
 export default function TaskItem({ index, task, onComplete, onDelete }) {
   const { id, text, complete } = task;
-  const handleComplete = () => onComplete(id);
+  const handleComplete = () => onComplete(task);
   return (
     <Draggable draggableId={`${id}`} index={index}>
       {(provided, snapshot) => (

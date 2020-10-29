@@ -29,8 +29,17 @@ const deleteTask = async (taskId) => {
   return response.json();
 };
 
+const update = async (taskId, data) => {
+  const response = await fetch(`/.netlify/functions/updateTask/${taskId}`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
 export default {
   readAll: readAll,
   create: create,
   deleteTask: deleteTask,
+  update: update,
 };

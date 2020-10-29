@@ -48,8 +48,10 @@ export default function Home({ onSignout }) {
     dispatch({ type: CREATE, task: response });
   };
 
-  const handleComplete = (id) => {
-    dispatch({ type: COMPLETE, id: id });
+  const handleComplete = (task) => {
+    const data = { complete: !task.complete };
+    api.update(task.id, data);
+    dispatch({ type: COMPLETE, id: task.id });
   };
 
   const handleDelete = async (id) => {
