@@ -11,7 +11,7 @@ import IconButton from './components/IconButton';
 import { ReactComponent as SunIcon } from './icons/sun.svg';
 import { ReactComponent as MoonIcon } from './icons/moon.svg';
 import todoReducer from './todoReducer';
-import { CREATE, COMPLETE, MOVE } from './constants';
+import { CREATE, COMPLETE, MOVE, REMOVE, INIT } from './constants';
 import useTheme from './useTheme';
 import TaskList from './components/TaskList';
 import Sidebar from './components/Sidebar';
@@ -59,21 +59,10 @@ export default function Home({ onSignout }) {
     dispatch({ type: COMPLETE, id: id });
   };
 
-  const renderTaskItems = () => {
-    const tasksToRender = hideCompleted
-      ? state.filter((task) => !task.complete)
-      : state;
-    return tasksToRender.map((task, index) => (
-      <TaskItem
-        key={`${task.id}`}
-        index={index}
-        task={task}
-        onComplete={handleComplete}
-      />
-    ));
+  const handleDelete = async (id) => {
+    api.deleteTask(id);
+    dispatch({ type: REMOVE, id: id });
   };
-
-  const themeIcon = theme === 'dark' ? <MoonIcon /> : <SunIcon />;
 
   const handleDragEnd = (result) => {
     if (!result.destination) {
@@ -90,9 +79,26 @@ export default function Home({ onSignout }) {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const renderTaskItems = () => {
+    const tasksToRender = hideCompleted
+      ? state.filter((task) => !task.complete)
+      : state;
+    return tasksToRender.map((task, index) => (
+      <TaskItem
+        key={`${task.id}`}
+        index={index}
+        task={task}
+        onComplete={handleComplete}
+        onDelete={handleDelete}
+      />
+    ));
+  };
+
+  const themeIcon = theme === 'dark' ? <MoonIcon /> : <SunIcon />;
+
   useEffect(() => {
     api.readAll().then((tasks) => {
-      dispatch({ type: 'init', tasks: tasks });
+      dispatch({ type: INIT, tasks: tasks });
     });
   }, []);
 

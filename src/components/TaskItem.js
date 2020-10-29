@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import CheckBox from './CheckBox';
+import { ReactComponent as DeleteIcon } from '../icons/delete.svg';
+import IconButton from './IconButton';
 
 const StyledTaskItem = styled.div`
   display: grid;
@@ -29,7 +31,7 @@ const StyledTaskItem = styled.div`
   }
 `;
 
-export default function TaskItem({ index, task, onComplete }) {
+export default function TaskItem({ index, task, onComplete, onDelete }) {
   const { id, text, complete } = task;
   const handleComplete = () => onComplete(id);
   return (
@@ -44,6 +46,9 @@ export default function TaskItem({ index, task, onComplete }) {
         >
           <CheckBox checked={complete} onClick={handleComplete} />
           <p>{text}</p>
+          <IconButton onClick={() => onDelete(id)}>
+            <DeleteIcon />
+          </IconButton>
         </StyledTaskItem>
       )}
     </Draggable>

@@ -14,6 +14,9 @@ const todoReducer = (state, action) => {
     case INIT:
       return action.tasks;
 
+    case 'remove':
+      return deleteTask(state, action);
+
     default:
       return state;
   }
@@ -36,6 +39,10 @@ function move(state, action) {
   result.splice(fromIndex, 1);
   result.splice(toIndex, 0, state[fromIndex]);
   return result;
+}
+
+function deleteTask(state, action) {
+  return state.filter((task) => !(task.id === action.id));
 }
 
 export default todoReducer;

@@ -22,7 +22,15 @@ const create = async (text) => {
   return response.json();
 };
 
+const deleteTask = async (taskId) => {
+  const response = await fetch(`/.netlify/functions/deleteTask/${taskId}`, {
+    method: 'POST',
+  });
+  return response.json();
+};
+
 export default {
   readAll: readAll,
   create: create,
+  deleteTask: deleteTask,
 };
