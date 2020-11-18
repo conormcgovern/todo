@@ -28,8 +28,9 @@ exports.handler = async function (event, context) {
       )
     );
     const tasksData = tasks.data.map((task) => {
-      return { ...task.data, id: task.ref.id };
+      return { ...task.data, id: task.ref.id, listId: task.list.ref.id };
     });
+    console.log(tasksData);
     return {
       statusCode: 200,
       body: JSON.stringify(tasksData),

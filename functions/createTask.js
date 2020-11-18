@@ -1,18 +1,19 @@
 const faunadb = require('faunadb');
 
-const { Create, Collection, Call, Function } = faunadb.query;
+const { Create, Collection, Call, Function, Ref } = faunadb.query;
 
 exports.handler = async function (event, context) {
   const { user } = context.clientContext;
   const client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET,
   });
-  const taskText = JSON.parse(event.body);
+  const data = JSON.parse(event.body);
 
   const task = {
-    text: taskText,
+    text: data.text,
     complete: false,
     user: Call(Function('getUser'), user.sub),
+    list: Ref(Collection('lists'), data.listId),
   };
 
   try {
@@ -21,7 +22,11 @@ exports.handler = async function (event, context) {
         data: task,
       })
     );
-    const taskData = { ...createdTask.data, id: createdTask.ref.id };
+    const taskData = {
+      ...createdTask.data,
+      id: createdTask.ref.id,
+      listId: createdTask.data.list.id,
+    };
     return {
       statusCode: 200,
       body: JSON.stringify(taskData),

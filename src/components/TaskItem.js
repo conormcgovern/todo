@@ -32,7 +32,7 @@ const StyledTaskItem = styled.div`
 `;
 
 export default function TaskItem({ index, task, onComplete, onDelete }) {
-  const { id, text, complete } = task;
+  const { id, text, complete, listId } = task;
   const handleComplete = () => onComplete(task);
   return (
     <Draggable draggableId={`${id}`} index={index}>
@@ -46,7 +46,7 @@ export default function TaskItem({ index, task, onComplete, onDelete }) {
         >
           <CheckBox checked={complete} onClick={handleComplete} />
           <p>{text}</p>
-          <IconButton onClick={() => onDelete(id)}>
+          <IconButton onClick={() => onDelete(id, listId)}>
             <DeleteIcon />
           </IconButton>
         </StyledTaskItem>

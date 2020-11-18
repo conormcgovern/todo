@@ -3,14 +3,21 @@ import GlobalStyles from './GlobalStyles';
 import styled from 'styled-components';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { CREATE, COMPLETE, MOVE, REMOVE, INIT } from './constants';
+import {
+  ADD_TASK,
+  COMPLETE_TASK,
+  MOVE_TASK,
+  REMOVE_TASK,
+  INIT,
+  SET_SELECTED_LIST,
+} from './actions';
 import api from './api';
-import todoReducer from './todoReducer';
 import TodoAppBar from './components/TodoAppBar';
 import Sidebar from './components/Sidebar';
 import TaskTextInput from './components/TaskTextInput';
 import TaskList from './components/TaskList';
 import TaskItem from './components/TaskItem';
+import reducer from './reducer';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -38,25 +45,34 @@ const Main = styled.div`
   height: 100%;
 `;
 
+const LOAD_STATE = {
+  IN_PROGRESS: 'in_progress',
+  SUCCESS: 'success',
+  ERROR: 'error',
+};
+
 export default function Home({ onSignout }) {
-  const [state, dispatch] = useReducer(todoReducer, []);
-  const hideCompleted = false;
+  const [state, dispatch] = useReducer(reducer, []);
+  const [loadState, setLoadState] = useState(LOAD_STATE.IN_PROGRESS);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSubmit = async (value) => {
-    const response = await api.create(value);
-    dispatch({ type: CREATE, task: response });
+    const response = await api.create(value, state.selectedListId);
+    dispatch({ type: ADD_TASK, payload: response });
   };
 
   const handleComplete = (task) => {
     const data = { complete: !task.complete };
     api.update(task.id, data);
-    dispatch({ type: COMPLETE, id: task.id });
+    dispatch({ type: COMPLETE_TASK, payload: task });
   };
 
-  const handleDelete = async (id) => {
-    api.deleteTask(id);
-    dispatch({ type: REMOVE, id: id });
+  const handleDelete = async (taskId, listId) => {
+    api.deleteTask(taskId);
+    dispatch({
+      type: REMOVE_TASK,
+      payload: { taskId: taskId, listId: listId },
+    });
   };
 
   const handleDragEnd = (result) => {
@@ -64,9 +80,11 @@ export default function Home({ onSignout }) {
       return;
     }
     dispatch({
-      type: MOVE,
-      fromIndex: result.source.index,
-      toIndex: result.destination.index,
+      type: MOVE_TASK,
+      payload: {
+        fromIndex: result.source.index,
+        toIndex: result.destination.index,
+      },
     });
   };
 
@@ -74,10 +92,18 @@ export default function Home({ onSignout }) {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const handleListSelect = (listId) => {
+    dispatch({ type: SET_SELECTED_LIST, payload: listId });
+  };
+
   const renderTaskItems = () => {
-    const tasksToRender = hideCompleted
-      ? state.filter((task) => !task.complete)
-      : state;
+    const selectedList = state.lists.find(
+      (list) => state.selectedListId === list.id
+    );
+    const tasks = selectedList.tasks;
+    const tasksToRender = !selectedList.showCompleted
+      ? tasks.filter((task) => !task.complete)
+      : tasks;
     return tasksToRender.map((task, index) => (
       <TaskItem
         key={`${task.id}`}
@@ -90,8 +116,9 @@ export default function Home({ onSignout }) {
   };
 
   useEffect(() => {
-    api.readAll().then((tasks) => {
-      dispatch({ type: INIT, tasks: tasks });
+    api.readLists().then((lists) => {
+      dispatch({ type: INIT, payload: lists });
+      setLoadState(LOAD_STATE.SUCCESS);
     });
   }, []);
 
@@ -101,17 +128,23 @@ export default function Home({ onSignout }) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Wrapper>
           <TodoAppBar onMenuClick={handleMenuClick} onSignout={onSignout} />
-          <Main>
-            <Sidebar open={sidebarOpen}></Sidebar>
-            <Tasks>
-              <h2>Tasks</h2>
-              <TaskTextInput
-                onSubmit={handleSubmit}
-                placeholder="Add a new task"
-              />
-              <TaskList>{renderTaskItems()}</TaskList>
-            </Tasks>
-          </Main>
+          {loadState === LOAD_STATE.SUCCESS && (
+            <Main>
+              <Sidebar
+                open={sidebarOpen}
+                state={state}
+                onListSelect={handleListSelect}
+              ></Sidebar>
+              <Tasks>
+                <h2>Tasks</h2>
+                <TaskTextInput
+                  onSubmit={handleSubmit}
+                  placeholder="Add a new task"
+                />
+                <TaskList>{renderTaskItems()}</TaskList>
+              </Tasks>
+            </Main>
+          )}
         </Wrapper>
       </DragDropContext>
     </React.Fragment>

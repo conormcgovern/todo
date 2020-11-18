@@ -10,8 +10,12 @@ const NavItemWrapper = styled.li`
   }
 `;
 
-export default function NavItem({ children, className }) {
-  return <NavItemWrapper className={className}>{children}</NavItemWrapper>;
+export default function NavItem({ children, className, onClick }) {
+  return (
+    <NavItemWrapper className={className} onClick={onClick}>
+      {children}
+    </NavItemWrapper>
+  );
 }
 
 NavItem.propTypes = {
