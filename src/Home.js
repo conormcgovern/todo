@@ -43,8 +43,16 @@ export default function Home({ listId, history, onSignout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSubmit = async (value) => {
-    const response = await api.create(value, state.selectedListId);
-    dispatch({ type: ADD_TASK, payload: response });
+    const task = {
+      id: Math.floor(Math.random() * Math.floor(1000)), // temporary id
+      listId: listId,
+      text: value,
+      complete: false,
+    };
+    dispatch({ type: ADD_TASK, payload: task });
+    await api.create(value, listId);
+    const lists = await api.readLists();
+    dispatch({ type: INIT, payload: lists });
   };
 
   const handleComplete = (task) => {
