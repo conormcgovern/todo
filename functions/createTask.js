@@ -1,6 +1,6 @@
 const faunadb = require('faunadb');
 
-const { Create, Collection, Call, Function, Ref } = faunadb.query;
+const { Create, Collection, Ref } = faunadb.query;
 
 exports.handler = async function (event, context) {
   const { user } = context.clientContext;
@@ -12,7 +12,7 @@ exports.handler = async function (event, context) {
   const task = {
     text: data.text,
     complete: false,
-    user: Call(Function('getUser'), user.sub),
+    userId: user.sub,
     list: Ref(Collection('lists'), data.listId),
   };
 

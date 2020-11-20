@@ -1,17 +1,6 @@
 const faunadb = require('faunadb');
 
-const {
-  Paginate,
-  Match,
-  Index,
-  Call,
-  Function,
-  Get,
-  Map,
-  Lambda,
-  Var,
-  Let,
-} = faunadb.query;
+const { Paginate, Match, Index, Get, Map, Lambda, Var, Let } = faunadb.query;
 
 exports.handler = async function (event, context) {
   const { user } = context.clientContext;
@@ -22,9 +11,7 @@ exports.handler = async function (event, context) {
   try {
     const lists = await client.query(
       Map(
-        Paginate(
-          Match(Index('lists_by_user'), Call(Function('getUser'), user.sub))
-        ),
+        Paginate(Match(Index('lists_by_userId'), user.sub)),
         Lambda(
           'ref',
           Let(
