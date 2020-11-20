@@ -4,16 +4,12 @@ import {
   INIT,
   MOVE_TASK,
   REMOVE_TASK,
-  SET_SELECTED_LIST,
 } from './actions';
 
 const reducer = (state, action) => {
   switch (action.type) {
     case INIT:
       return initState(action);
-
-    case SET_SELECTED_LIST:
-      return setSelectedList(state, action);
 
     case ADD_TASK:
       return addTask(state, action);
@@ -33,14 +29,6 @@ const initState = (action) => {
   const lists = action.payload;
   return {
     lists: lists,
-    selectedListId: lists[0].id,
-  };
-};
-
-const setSelectedList = (state, action) => {
-  return {
-    ...state,
-    selectedListId: action.payload,
   };
 };
 
