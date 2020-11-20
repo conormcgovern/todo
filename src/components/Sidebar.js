@@ -32,18 +32,18 @@ const SidebarItem = styled(NavItem)`
   }
 `;
 
-function Sidebar({ open, state, onListSelect }) {
+function Sidebar({ open, lists, onListSelect, currentListId }) {
   return (
     <StyledSidebar open={open}>
       <ul>
         <SidebarItem>
           <h3>Lists</h3>
         </SidebarItem>
-        {state.lists.map((list) => (
+        {lists.map((list) => (
           <SidebarItem
             key={list.id}
             onClick={() => onListSelect(list.id)}
-            selected={state.selectedListId === list.id}
+            selected={list.id === currentListId}
           >
             <IconButton>
               <ListIcon></ListIcon>

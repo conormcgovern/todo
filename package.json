@@ -8,9 +8,11 @@
     "@testing-library/user-event": "^7.1.2",
     "faunadb": "^3.0.1",
     "netlify-identity-widget": "^1.9.1",
+    "node-fetch": "^2.6.1",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.0"
   },

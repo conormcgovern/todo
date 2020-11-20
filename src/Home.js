@@ -9,14 +9,11 @@ import {
   MOVE_TASK,
   REMOVE_TASK,
   INIT,
-  SET_SELECTED_LIST,
 } from './actions';
 import api from './api';
 import TodoAppBar from './components/TodoAppBar';
 import Sidebar from './components/Sidebar';
-import TaskTextInput from './components/TaskTextInput';
-import TaskList from './components/TaskList';
-import TaskItem from './components/TaskItem';
+import Tasks from './components/Tasks';
 import reducer from './reducer';
 
 const Wrapper = styled.div`
@@ -26,17 +23,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`;
-
-const Tasks = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 16px 40px;
-  overflow: hidden;
-  h2 {
-    color: var(--color-primary);
-  }
 `;
 
 const Main = styled.div`
@@ -51,7 +37,7 @@ const LOAD_STATE = {
   ERROR: 'error',
 };
 
-export default function Home({ onSignout }) {
+export default function Home({ listId, history, onSignout }) {
   const [state, dispatch] = useReducer(reducer, []);
   const [loadState, setLoadState] = useState(LOAD_STATE.IN_PROGRESS);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -93,26 +79,13 @@ export default function Home({ onSignout }) {
   };
 
   const handleListSelect = (listId) => {
-    dispatch({ type: SET_SELECTED_LIST, payload: listId });
+    history.push('/tasks/' + listId);
   };
 
-  const renderTaskItems = () => {
-    const selectedList = state.lists.find(
-      (list) => state.selectedListId === list.id
-    );
-    const tasks = selectedList.tasks;
-    const tasksToRender = !selectedList.showCompleted
-      ? tasks.filter((task) => !task.complete)
-      : tasks;
-    return tasksToRender.map((task, index) => (
-      <TaskItem
-        key={`${task.id}`}
-        index={index}
-        task={task}
-        onComplete={handleComplete}
-        onDelete={handleDelete}
-      />
-    ));
+  const getCurrentList = () => {
+    return listId
+      ? state.lists.find((list) => listId === list.id)
+      : state.lists[0];
   };
 
   useEffect(() => {
@@ -132,17 +105,16 @@ export default function Home({ onSignout }) {
             <Main>
               <Sidebar
                 open={sidebarOpen}
-                state={state}
+                lists={state.lists}
                 onListSelect={handleListSelect}
+                currentListId={listId}
               ></Sidebar>
-              <Tasks>
-                <h2>Tasks</h2>
-                <TaskTextInput
-                  onSubmit={handleSubmit}
-                  placeholder="Add a new task"
-                />
-                <TaskList>{renderTaskItems()}</TaskList>
-              </Tasks>
+              <Tasks
+                list={getCurrentList()}
+                onSubmit={handleSubmit}
+                onComplete={handleComplete}
+                onDelete={handleDelete}
+              ></Tasks>
             </Main>
           )}
         </Wrapper>
