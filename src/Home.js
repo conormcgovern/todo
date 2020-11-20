@@ -41,16 +41,17 @@ export default function Home({ listId, history, onSignout }) {
   const [state, dispatch] = useReducer(reducer, []);
   const [loadState, setLoadState] = useState(LOAD_STATE.IN_PROGRESS);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentListId, setCurrentListId] = useState(listId);
 
   const handleSubmit = async (value) => {
     const task = {
       id: Math.floor(Math.random() * Math.floor(1000)), // temporary id
-      listId: listId,
+      listId: currentListId,
       text: value,
       complete: false,
     };
     dispatch({ type: ADD_TASK, payload: task });
-    await api.create(value, listId);
+    await api.create(value, currentListId);
     const lists = await api.readLists();
     dispatch({ type: INIT, payload: lists });
   };
@@ -99,6 +100,7 @@ export default function Home({ listId, history, onSignout }) {
   useEffect(() => {
     api.readLists().then((lists) => {
       dispatch({ type: INIT, payload: lists });
+      setCurrentListId(listId ? listId : lists[0].id);
       setLoadState(LOAD_STATE.SUCCESS);
     });
   }, []);
