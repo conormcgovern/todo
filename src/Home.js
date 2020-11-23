@@ -109,7 +109,7 @@ export default function Home({ listId, history, onSignout }) {
       : state.lists[0];
   };
 
-  useEffect(() => {
+  useEffect((listId, history) => {
     api.readLists().then((lists) => {
       dispatch({ type: INIT, payload: lists });
       setLoadState(LOAD_STATE.SUCCESS);
