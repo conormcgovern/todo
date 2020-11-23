@@ -32,6 +32,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify(taskData),
     };
   } catch (error) {
+    console.error(error);
     return { statusCode: 500, body: error.toString() };
   }
 };

@@ -23,7 +23,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify(userData),
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { statusCode: 500, body: error.toString() };
   }
 };

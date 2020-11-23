@@ -20,6 +20,7 @@ exports.handler = async function (event) {
       body: JSON.stringify(response.data),
     };
   } catch (error) {
+    console.error(error);
     return { statusCode: 500, body: error.toString() };
   }
 };

@@ -8,7 +8,6 @@ exports.handler = async function (event, context) {
     secret: process.env.FAUNADB_SERVER_SECRET,
   });
   const data = JSON.parse(event.body);
-  console.log(data);
   const list = {
     name: data.name,
     showCompleted: false,
@@ -26,6 +25,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify(response.data),
     };
   } catch (error) {
+    console.error(error);
     return { statusCode: 500, body: error.toString() };
   }
 };
