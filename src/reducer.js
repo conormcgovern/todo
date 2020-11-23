@@ -26,6 +26,9 @@ const reducer = (state, action) => {
 
     case ADD_LIST:
       return addList(state, action);
+
+    default:
+      return state;
   }
 };
 
