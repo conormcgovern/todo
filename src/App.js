@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import Home from './Home';
+import api from './api';
 
 function PrivateRoute({ component: Component, ...rest }) {
   const isAuthenticated = !!netlifyIdentity.currentUser();
@@ -47,7 +48,12 @@ function Login({ location }) {
 
   const login = () => {
     netlifyIdentity.open();
-    netlifyIdentity.on('login', () => {
+    netlifyIdentity.on('login', async () => {
+      const isUser = await api.isUser();
+      if (!isUser) {
+        await api.createUser();
+        await api.createList({ name: 'Tasks' });
+      }
       setRedirectToRenderer(true);
     });
   };
@@ -67,7 +73,6 @@ function Login({ location }) {
 }
 
 export default function App() {
-  console.log(netlifyIdentity.currentUser());
   return (
     <Router>
       <div>
