@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import IconButton from './IconButton';
-import { ReactComponent as PlusIcon } from '../icons/plus.svg';
 
 const Input = styled.input`
   font-size: inherit;
