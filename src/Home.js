@@ -44,14 +44,15 @@ export default function Home({ listId, history, onSignout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSubmit = async (value) => {
+    const currentListId = listId ? listId : state.lists[0].id;
     const task = {
       id: Math.floor(Math.random() * Math.floor(1000)), // temporary id
-      listId: listId,
+      listId: currentListId,
       text: value,
       complete: false,
     };
     dispatch({ type: ADD_TASK, payload: task });
-    await api.create(value, listId);
+    await api.create(value, currentListId);
     const lists = await api.readLists();
     dispatch({ type: INIT, payload: lists });
   };
@@ -109,13 +110,12 @@ export default function Home({ listId, history, onSignout }) {
       : state.lists[0];
   };
 
-  useEffect((listId, history) => {
+  useEffect(() => {
     api.readLists().then((lists) => {
       dispatch({ type: INIT, payload: lists });
       setLoadState(LOAD_STATE.SUCCESS);
-      !listId && history.push('/tasks/' + lists[0].id);
     });
-  }, []);
+  }, [listId]);
 
   return (
     <React.Fragment>
@@ -130,7 +130,7 @@ export default function Home({ listId, history, onSignout }) {
                 lists={state.lists}
                 onListSelect={handleListSelect}
                 onListSubmit={handleListCreate}
-                currentListId={listId}
+                currentListId={listId ? listId : state.lists[0]}
               ></Sidebar>
               <Tasks
                 list={getCurrentList()}
