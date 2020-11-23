@@ -4,6 +4,7 @@ import { ReactComponent as ListIcon } from '../icons/list.svg';
 import { ReactComponent as AddIcon } from '../icons/plus.svg';
 import IconButton from './IconButton';
 import NavItem from './NavItem';
+import TextInput from './TextInput';
 
 const StyledSidebar = styled.nav`
   display: flex;
@@ -32,7 +33,7 @@ const SidebarItem = styled(NavItem)`
   }
 `;
 
-function Sidebar({ open, lists, onListSelect, currentListId }) {
+function Sidebar({ open, lists, onListSelect, onListSubmit, currentListId }) {
   return (
     <StyledSidebar open={open}>
       <ul>
@@ -55,7 +56,7 @@ function Sidebar({ open, lists, onListSelect, currentListId }) {
           <IconButton>
             <AddIcon></AddIcon>
           </IconButton>
-          <p>New list</p>
+          <TextInput placeholder="New list" onSubmit={onListSubmit}></TextInput>
         </SidebarItem>
       </ul>
     </StyledSidebar>

@@ -1,4 +1,5 @@
 import {
+  ADD_LIST,
   ADD_TASK,
   COMPLETE_TASK,
   INIT,
@@ -22,6 +23,9 @@ const reducer = (state, action) => {
 
     case MOVE_TASK:
       return moveTask(state, action);
+
+    case ADD_LIST:
+      return addList(state, action);
   }
 };
 
@@ -78,6 +82,14 @@ const moveTask = (state, action) => {
         ? { ...list, tasks: move(list.tasks, fromIndex, toIndex) }
         : list;
     }),
+  };
+};
+
+const addList = (state, action) => {
+  const list = action.payload;
+  return {
+    ...state,
+    lists: [...state.lists, list],
   };
 };
 

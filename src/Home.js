@@ -9,6 +9,7 @@ import {
   MOVE_TASK,
   REMOVE_TASK,
   INIT,
+  ADD_LIST,
 } from './actions';
 import api from './api';
 import TodoAppBar from './components/TodoAppBar';
@@ -41,17 +42,16 @@ export default function Home({ listId, history, onSignout }) {
   const [state, dispatch] = useReducer(reducer, []);
   const [loadState, setLoadState] = useState(LOAD_STATE.IN_PROGRESS);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [currentListId, setCurrentListId] = useState(listId);
 
   const handleSubmit = async (value) => {
     const task = {
       id: Math.floor(Math.random() * Math.floor(1000)), // temporary id
-      listId: currentListId,
+      listId: listId,
       text: value,
       complete: false,
     };
     dispatch({ type: ADD_TASK, payload: task });
-    await api.create(value, currentListId);
+    await api.create(value, listId);
     const lists = await api.readLists();
     dispatch({ type: INIT, payload: lists });
   };
@@ -91,6 +91,18 @@ export default function Home({ listId, history, onSignout }) {
     history.push('/tasks/' + listId);
   };
 
+  const handleListCreate = async (listName) => {
+    const list = {
+      name: listName,
+      showCompleted: false,
+      id: Math.floor(Math.random() * Math.floor(1000)), // temporary id
+    };
+    dispatch({ type: ADD_LIST, payload: list });
+    await api.createList({ name: listName });
+    const lists = await api.readLists();
+    dispatch({ type: INIT, payload: lists });
+  };
+
   const getCurrentList = () => {
     return listId
       ? state.lists.find((list) => listId === list.id)
@@ -100,8 +112,8 @@ export default function Home({ listId, history, onSignout }) {
   useEffect(() => {
     api.readLists().then((lists) => {
       dispatch({ type: INIT, payload: lists });
-      setCurrentListId(listId ? listId : lists[0].id);
       setLoadState(LOAD_STATE.SUCCESS);
+      !listId && history.push('/tasks/' + lists[0].id);
     });
   }, []);
 
@@ -117,6 +129,7 @@ export default function Home({ listId, history, onSignout }) {
                 open={sidebarOpen}
                 lists={state.lists}
                 onListSelect={handleListSelect}
+                onListSubmit={handleListCreate}
                 currentListId={listId}
               ></Sidebar>
               <Tasks
